@@ -15,6 +15,10 @@ builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer("Dat
 builder.Services.AddScoped<IProductService, ProductsService>();
 builder.Services.AddScoped<IProductTypeService, ProductTypesService>();
 
+// Registro de automappper
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

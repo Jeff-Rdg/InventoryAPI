@@ -1,4 +1,5 @@
-﻿using InventoryAPI.DTO;
+﻿using AutoMapper;
+using InventoryAPI.DTO;
 using InventoryAPI.Model;
 using InventoryAPI.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
@@ -10,29 +11,31 @@ namespace InventoryAPI.Controllers
     [ApiController]
     public class ProductController : ControllerBase
     {
+        private readonly IMapper _mapper;
         private IProductService _productService;
 
-        public ProductController(IProductService productService)
+        public ProductController(IProductService productService, IMapper mapper)
         {
             _productService = productService;
+            _mapper = mapper;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IAsyncEnumerable<Product>>> GetProducts()
+        public async Task<ActionResult<IAsyncEnumerable<ProductDto>>> GetProducts()
         {
             try
             {
                 var products = await _productService.GetProducts();
 
-                List<ProductDTO> productsReturn = new List<ProductDTO>();
+                var productsDTO = _mapper.Map<IEnumerable<ProductDto>>(products);
 
-                foreach (var product in products)
+                if (products == null)
                 {
-                    productsReturn.Add(new ProductDTO { Id = product.Id, Name = product.Name, Description = product.Description, ProductTypeId = product.ProductTypeId, CreatedDate = product.CreatedDate});
+                    return NotFound();
                 }
-                
-                return Ok(productsReturn);
-                
+
+                return Ok(productsDTO);
+
                 //return Ok(products);
             }
             catch
@@ -43,25 +46,19 @@ namespace InventoryAPI.Controllers
         }
 
         [HttpGet("productbyname")]
-        public async Task<ActionResult<IAsyncEnumerable<Product>>> GetProductByName([FromQuery] string name)
+        public async Task<ActionResult<IAsyncEnumerable<ProductDto>>> GetProductByName([FromQuery] string name)
         {
             try
             {
                 var products = await _productService.GetProductByName(name);
 
-                List<ProductDTO> productsReturn = new List<ProductDTO>();
+                var productsDTO = _mapper.Map<IEnumerable<ProductDto>>(products);
 
-                foreach (var product in products)
-                {
-                    productsReturn.Add(new ProductDTO { Id = product.Id, Name = product.Name, Description = product.Description, ProductTypeId = product.ProductTypeId, CreatedDate = product.CreatedDate });
-                }
-
-
-                if (productsReturn == null)
+                if (products.Count() == 0)
                 {
                     return NotFound("Não existem registros com o nome informado");
                 }
-                return Ok(productsReturn);
+                return Ok(productsDTO);
                 //return Ok(products);
             }
             catch
@@ -72,25 +69,19 @@ namespace InventoryAPI.Controllers
         }
 
         [HttpGet("{id:int}", Name = "GetProduct")]
-        public async Task<ActionResult<Product>> GetProduct(int id)
+        public async Task<ActionResult<ProductDto>> GetProduct(int id)
         {
             try
             {
                 var product = await _productService.GetProduct(id);
 
-                ProductDTO pr = new ProductDTO(){
-                    Id = product.Id,
-                    Name = product.Name,
-                    Description = product.Description,
-                    ProductTypeId = product.ProductTypeId,
-                    CreatedDate = product.CreatedDate,
-                };
+                var productDTO = _mapper.Map<ProductDto>(product);
 
                 if (product == null)
                 {
                     return NotFound("Não existe produto com este Id.");
                 }
-                return Ok(pr);
+                return Ok(productDTO);
             }
             catch
             {
@@ -99,23 +90,17 @@ namespace InventoryAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Create(Product product)
+        public async Task<ActionResult<ProductDto>> Create(CreateProductDto createProductDto)
         {
             // Continuar aqui a quebrar a cabeça
             try
             {
+                var productModel = _mapper.Map<Product>(createProductDto);
 
-                ProductDTO newProduct = new()
-                {
-                    Id = product.Id,
-                    Name = product.Name,
-                    Description = product.Description,
-                    ProductTypeId = product.ProductTypeId,
-                    CreatedDate = product.CreatedDate
-                };
+                await _productService.CreateProduct(productModel);
 
-                await _productService.CreateProduct(product);
-                return CreatedAtRoute(nameof(GetProduct), new { id = product.Id }, newProduct);
+                var productDto = _mapper.Map<ProductDto>(productModel);
+                return CreatedAtRoute(nameof(GetProduct), new { id = productDto.Id }, productDto);
 
             }
             catch
