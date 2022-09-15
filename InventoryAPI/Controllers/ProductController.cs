@@ -12,7 +12,7 @@ namespace InventoryAPI.Controllers
     public class ProductController : ControllerBase
     {
         private readonly IMapper _mapper;
-        private IProductService _productService;
+        private readonly IProductService _productService;
 
         public ProductController(IProductService productService, IMapper mapper)
         {
@@ -110,7 +110,7 @@ namespace InventoryAPI.Controllers
         }
 
         [HttpPut("{id:int}")]
-        public async Task<ActionResult> UpdateProduct(int id, [FromBody] ProductDto updateProductDto)
+        public async Task <ActionResult> UpdateProduct(int id, [FromBody] ProductDto updateProductDto)
         {
             try
             {
