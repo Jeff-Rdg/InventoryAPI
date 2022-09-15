@@ -90,9 +90,9 @@ namespace InventoryAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<ProductDto>> Create(CreateProductDto createProductDto)
+        public async Task<ActionResult<ProductDto>> CreateProduct(CreateProductDto createProductDto)
         {
-            // Continuar aqui a quebrar a cabeça
+
             try
             {
                 var productModel = _mapper.Map<Product>(createProductDto);
@@ -106,6 +106,53 @@ namespace InventoryAPI.Controllers
             catch
             {
                 return BadRequest("Invalido");
+            }
+        }
+
+        [HttpPut("{id:int}")]
+        public async Task<ActionResult> UpdateProduct(int id, [FromBody] ProductDto updateProductDto)
+        {
+            try
+            {
+                var updateProduct = _mapper.Map<Product>(updateProductDto);
+
+                if (updateProduct.Id == id)
+                {
+                    await _productService.UpdateProduct(updateProduct);
+                    return Ok($"Produto com id={id} atualizado com sucesso!");
+                }
+                else
+                {
+                    return BadRequest("Dados inconsistentes");
+                }
+            }
+            catch
+            {
+                return BadRequest("Operação Invalida");
+            }
+        }
+
+        [HttpDelete("{id:int}")]
+        public async Task<ActionResult> DeleteProduct(int id)
+        {
+            try
+            {
+                var getProduct = await _productService.GetProduct(id);
+                // var product = _mapper.Map<Product>(getProduct);
+
+                if (getProduct.Id != null)
+                {
+                    await _productService.DeleteProduct(getProduct);
+                    return Ok($"Produto com id={id} deletado com sucesso!");
+                }
+                else
+                {
+                    return NotFound("Produto não encontrado");
+                }
+            }
+            catch
+            {
+                return BadRequest("Operação Invalida");
             }
         }
     }

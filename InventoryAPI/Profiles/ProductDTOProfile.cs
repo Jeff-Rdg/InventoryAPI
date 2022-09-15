@@ -8,6 +8,7 @@ namespace InventoryAPI.Profiles
     {
         public ProductDTOProfile()
         {
+            // source => destinations
             CreateMap<Product, ProductDto>();
         }
     }
