@@ -1,8 +1,7 @@
 ﻿using AutoMapper;
 using InventoryAPI.DTO;
 using InventoryAPI.Model;
-using InventoryAPI.Services.Interfaces;
-using Microsoft.AspNetCore.Http;
+using InventoryAPI.Services.ProductServices;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InventoryAPI.Controllers
@@ -110,11 +109,11 @@ namespace InventoryAPI.Controllers
         }
 
         [HttpPut("{id:int}")]
-        public async Task <ActionResult> UpdateProduct(int id, [FromBody] ProductDto updateProductDto)
+        public async Task <ActionResult> UpdateProduct(int id, [FromBody] ProductDto productDto)
         {
             try
             {
-                var updateProduct = _mapper.Map<Product>(updateProductDto);
+                var updateProduct = _mapper.Map<Product>(productDto);
 
                 if (updateProduct.Id == id)
                 {

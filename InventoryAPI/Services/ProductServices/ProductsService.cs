@@ -1,9 +1,8 @@
 ﻿using InventoryAPI.Context;
 using InventoryAPI.Model;
-using InventoryAPI.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace InventoryAPI.Services
+namespace InventoryAPI.Services.ProductServices
 {
     public class ProductsService : IProductService
     {
@@ -18,7 +17,7 @@ namespace InventoryAPI.Services
         {
             try
             {
-            return await _context.Products.ToListAsync();
+                return await _context.Products.ToListAsync();
             }
             catch
             {
@@ -32,7 +31,7 @@ namespace InventoryAPI.Services
                 IEnumerable<Product> products;
                 if (!string.IsNullOrWhiteSpace(name))
                 {
-                    products = await _context.Products.Where(n=>n.Name.Contains(name)).ToListAsync();
+                    products = await _context.Products.Where(n => n.Name.Contains(name)).ToListAsync();
 
                 }
                 else

@@ -1,6 +1,7 @@
-using InventoryAPI.Context;
-using InventoryAPI.Services;
-using InventoryAPI.Services.Interfaces;
+﻿using InventoryAPI.Context;
+using InventoryAPI.Services.ProductServices;
+using InventoryAPI.Services.ProductTypeServices;
+using InventoryAPI.Services.UserServices;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,13 +12,17 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+// Conexão com o banco
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer("Data Source=JEFFERSON\\SQLEXPRESS;Initial Catalog=InventoryProject;Integrated Security=True"));
+
+// Injeção de dependencia
 builder.Services.AddScoped<IProductService, ProductsService>();
 builder.Services.AddScoped<IProductTypeService, ProductTypesService>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 // Registro de automappper
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-
 
 var app = builder.Build();
 
