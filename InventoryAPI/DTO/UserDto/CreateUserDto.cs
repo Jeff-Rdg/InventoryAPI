@@ -11,7 +11,10 @@ namespace InventoryAPI.DTO.UserDto
         public string Phone { get; set; }
         [Required]
         public string Email { get; set; }
-        
+        [Required]
+        [StringLength(30)]
+        public string Password { get; set; }
+
         public bool IsAdmin { get; set; } = false;
     }
 }
