@@ -1,6 +1,6 @@
 ﻿using InventoryAPI.Model;
 
-namespace InventoryAPI.Services.ProductTypeServices
+namespace InventoryAPI.Services
 {
     public interface IProductTypeService
     {

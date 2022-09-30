@@ -2,7 +2,7 @@
 using InventoryAPI.Model;
 using Microsoft.EntityFrameworkCore;
 
-namespace InventoryAPI.Services.ProductTypeServices
+namespace InventoryAPI.Services
 {
     public class ProductTypesService : IProductTypeService
     {

@@ -1,8 +1,9 @@
 ﻿using InventoryAPI.Context;
+using InventoryAPI.Services;
 using InventoryAPI.Services.ProductServices;
-using InventoryAPI.Services.ProductTypeServices;
 using InventoryAPI.Services.UserServices;
 using Microsoft.EntityFrameworkCore;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +24,8 @@ builder.Services.AddScoped<IUserService, UserService>();
 
 // Registro de automappper
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+
 
 var app = builder.Build();
 

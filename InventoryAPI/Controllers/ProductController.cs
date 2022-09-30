@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using InventoryAPI.DTO;
+using InventoryAPI.DTO.ProductTypeDto;
 using InventoryAPI.Model;
 using InventoryAPI.Services.ProductServices;
 using Microsoft.AspNetCore.Mvc;
@@ -26,16 +27,15 @@ namespace InventoryAPI.Controllers
             {
                 var products = await _productService.GetProducts();
 
-                var productsDTO = _mapper.Map<IEnumerable<ProductDto>>(products);
+                var resources = _mapper.Map<IEnumerable<Product>, IEnumerable<ProductDto>>(products);
 
-                if (products == null)
+                if (resources == null)
                 {
                     return NotFound();
                 }
 
-                return Ok(productsDTO);
+                return Ok(resources);
 
-                //return Ok(products);
             }
             catch
             {

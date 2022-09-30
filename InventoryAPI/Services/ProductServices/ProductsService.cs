@@ -1,6 +1,8 @@
 ﻿using InventoryAPI.Context;
+using InventoryAPI.DTO.ProductTypeDto;
 using InventoryAPI.Model;
 using Microsoft.EntityFrameworkCore;
+using NuGet.Protocol;
 
 namespace InventoryAPI.Services.ProductServices
 {
@@ -17,7 +19,8 @@ namespace InventoryAPI.Services.ProductServices
         {
             try
             {
-                return await _context.Products.ToListAsync();
+                //corrigir referencia circular
+                return await _context.Products.Include(p => p.ProductType).ToListAsync();
             }
             catch
             {
