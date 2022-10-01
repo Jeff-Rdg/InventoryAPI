@@ -31,14 +31,14 @@ namespace InventoryAPI.Controllers
                 var users = await _userService.GetUsers();
 
                 // faço o mapeamento de 'users' do tipo 'User' para obter o retorno em 'userDto' do tipo 'UserDto', onde não possuem todas as propriedades de 'User'
-                var userDto = _mapper.Map<IEnumerable<UserDto>>(users);
+                var resources = _mapper.Map<IEnumerable<User>, IEnumerable<UserDto>>(users);
 
-                if (users == null)
+                if (resources == null)
                 {
                     return NotFound();
                 }
 
-                return Ok(userDto);
+                return Ok(resources);
 
             }
             catch
@@ -54,13 +54,13 @@ namespace InventoryAPI.Controllers
             {
                 var users = await _userService.GetUserByName(name);
 
-                var usersDTO = _mapper.Map<IEnumerable<UserDto>>(users);
+                var resources = _mapper.Map<IEnumerable<User>, IEnumerable<UserDto>>(users);
 
-                if (users.Count() == 0)
+                if (resources == null)
                 {
                     return NotFound("Não existem registros com o nome informado");
                 }
-                return Ok(usersDTO);
+                return Ok(resources);
 
             }
             catch
@@ -77,13 +77,13 @@ namespace InventoryAPI.Controllers
             {
                 var user = await _userService.GetUser(id);
 
-                var userDTO = _mapper.Map<UserDto>(user);
+                var resources = _mapper.Map<User, UserDto>(user);
 
-                if (user == null)
+                if (resources == null)
                 {
                     return NotFound("Não existe produto com este Id.");
                 }
-                return Ok(userDTO);
+                return Ok(resources);
             }
             catch
             {
@@ -97,12 +97,11 @@ namespace InventoryAPI.Controllers
 
             try
             {
-                var userModel = _mapper.Map<User>(createUserDto);
+                var userModel = _mapper.Map<CreateUserDto, User>(createUserDto);
 
                 await _userService.CreateUser(userModel);
-
-                var userDto = _mapper.Map<UserDto>(userModel);
-                return CreatedAtRoute(nameof(GetUser), new { id = userDto.Id }, userDto);
+                var resources = _mapper.Map<User, UserDto>(userModel);
+                return CreatedAtRoute(nameof(GetUser), new { id = resources.Id }, resources);
 
             }
             catch
@@ -116,7 +115,7 @@ namespace InventoryAPI.Controllers
         {
             try
             {
-                var updateUser = _mapper.Map<User>(userDto);
+                var updateUser = _mapper.Map<UserDto, User>(userDto);
 
                 if (updateUser.Id == id)
                 {
@@ -142,7 +141,7 @@ namespace InventoryAPI.Controllers
                 var getUser = await _userService.GetUser(id);
 
 
-                if (getUser.Id != null)
+                if (getUser != null)
                 {
                     await _userService.DeleteUser(getUser);
                     return Ok($"Usuário com id={id} deletado com sucesso!");

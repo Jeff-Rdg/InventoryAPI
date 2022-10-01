@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using InventoryAPI.DTO;
 using InventoryAPI.DTO.ProductTypeDto;
+using InventoryAPI.DTO.UserDto;
 using InventoryAPI.Model;
 
 namespace InventoryAPI.Profiles
@@ -10,6 +12,11 @@ namespace InventoryAPI.Profiles
         {
             CreateMap<CreateProductTypeDto, ProductType>();
             CreateMap<ProductTypeDto, ProductType>();
+
+            CreateMap<ProductDto, Product>();
+            CreateMap<CreateProductDto, Product>();
+
+            CreateMap<CreateUserDto, User>();
         }
     }
 }

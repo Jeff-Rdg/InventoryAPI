@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using InventoryAPI.DTO.ProductTypeDto;
 using InventoryAPI.Model;
-using InventoryAPI.Services;
+using InventoryAPI.Services.ProductTypeService;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -42,7 +42,7 @@ namespace InventoryAPI.Controllers
             }
         }
 
-        [HttpGet("productbyname")]
+        [HttpGet("producttypebyname")]
         public async Task<ActionResult<IAsyncEnumerable<ProductType>>> GetProductTypeByName([FromQuery] string name)
         {
             try
@@ -71,8 +71,6 @@ namespace InventoryAPI.Controllers
                 var productType = await _productTypesService.GetProductType(id);
                 var resource = _mapper.Map<ProductType, ProductTypeDto>(productType);
 
-                //var productDTO = _mapper.Map<ProductDto>(product);
-
                 if (resource == null)
                 {
                     return NotFound("Não existe produto com este Id.");
@@ -86,7 +84,7 @@ namespace InventoryAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateProductType([FromBody] CreateProductTypeDto resource)
+        public async Task<IActionResult> CreateProductType(CreateProductTypeDto resource)
         {
 
             try
@@ -115,7 +113,7 @@ namespace InventoryAPI.Controllers
                 if (productType.Id == id)
                 {
                     await _productTypesService.UpdateProductType(productType);
-                    return Ok($"Produto com id={id} atualizado com sucesso!");
+                    return Ok($"Tipo de produto com id={id} atualizado com sucesso!");
                 }
                 else
                 {
@@ -138,7 +136,7 @@ namespace InventoryAPI.Controllers
                 if (productType != null)
                 {
                     await _productTypesService.DeleteProductType(productType);
-                    return Ok($"Produto com id={id} deletado com sucesso!");
+                    return Ok($"Tipo de Produto com id={id} deletado com sucesso!");
                 }
                 else
                 {

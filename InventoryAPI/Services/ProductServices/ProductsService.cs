@@ -2,7 +2,6 @@
 using InventoryAPI.DTO.ProductTypeDto;
 using InventoryAPI.Model;
 using Microsoft.EntityFrameworkCore;
-using NuGet.Protocol;
 
 namespace InventoryAPI.Services.ProductServices
 {
@@ -34,7 +33,7 @@ namespace InventoryAPI.Services.ProductServices
                 IEnumerable<Product> products;
                 if (!string.IsNullOrWhiteSpace(name))
                 {
-                    products = await _context.Products.Where(n => n.Name.Contains(name)).ToListAsync();
+                    products = await _context.Products.Where(n => n.Name.Contains(name)).Include(p => p.ProductType).ToListAsync();
 
                 }
                 else

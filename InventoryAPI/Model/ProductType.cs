@@ -1,7 +1,5 @@
-﻿using Newtonsoft.Json;
-using System.Collections.ObjectModel;
-using System.ComponentModel.DataAnnotations;
-
+﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace InventoryAPI.Model
 {
@@ -12,6 +10,6 @@ namespace InventoryAPI.Model
         [StringLength(80)]
         public string Name { get; set; }
         [JsonIgnore]
-        public virtual ICollection<Product> Products { get; set; } = new Collection<Product>();
+        public virtual ICollection<Product> Products { get; set; }
     }
 }

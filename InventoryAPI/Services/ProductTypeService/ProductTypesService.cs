@@ -2,7 +2,7 @@
 using InventoryAPI.Model;
 using Microsoft.EntityFrameworkCore;
 
-namespace InventoryAPI.Services
+namespace InventoryAPI.Services.ProductTypeService
 {
     public class ProductTypesService : IProductTypeService
     {
@@ -18,7 +18,7 @@ namespace InventoryAPI.Services
         {
             try
             {
-                return await _context.ProductTypes.ToListAsync();
+                return await _context.ProductTypes.Include(p=>p.Products).ToListAsync();
             }
             catch
             {
@@ -33,7 +33,7 @@ namespace InventoryAPI.Services
                 IEnumerable<ProductType> productTypes;
                 if (!string.IsNullOrWhiteSpace(name))
                 {
-                    productTypes = await _context.ProductTypes.Where(n => n.Name.Contains(name)).ToListAsync();
+                    productTypes = await _context.ProductTypes.Where(n => n.Name.Contains(name)).Include(p => p.Products).ToListAsync();
 
                 }
                 else

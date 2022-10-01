@@ -4,6 +4,7 @@ using InventoryAPI.DTO.ProductTypeDto;
 using InventoryAPI.Model;
 using InventoryAPI.Services.ProductServices;
 using Microsoft.AspNetCore.Mvc;
+using System.Resources;
 
 namespace InventoryAPI.Controllers
 {
@@ -51,13 +52,13 @@ namespace InventoryAPI.Controllers
             {
                 var products = await _productService.GetProductByName(name);
 
-                var productsDTO = _mapper.Map<IEnumerable<ProductDto>>(products);
+                var resources = _mapper.Map<IEnumerable<Product>, IEnumerable<ProductDto>>(products);
 
-                if (products.Count() == 0)
+                if (resources == null)
                 {
                     return NotFound("Não existem registros com o nome informado");
                 }
-                return Ok(productsDTO);
+                return Ok(resources);
                 //return Ok(products);
             }
             catch
@@ -73,14 +74,13 @@ namespace InventoryAPI.Controllers
             try
             {
                 var product = await _productService.GetProduct(id);
+                var resources = _mapper.Map<Product, ProductDto>(product);
 
-                var productDTO = _mapper.Map<ProductDto>(product);
-
-                if (product == null)
+                if (resources == null)
                 {
                     return NotFound("Não existe produto com este Id.");
                 }
-                return Ok(productDTO);
+                return Ok(resources);
             }
             catch
             {
@@ -94,12 +94,13 @@ namespace InventoryAPI.Controllers
 
             try
             {
-                var productModel = _mapper.Map<Product>(createProductDto);
+                var productModel = _mapper.Map<CreateProductDto, Product>(createProductDto);
 
                 await _productService.CreateProduct(productModel);
 
-                var productDto = _mapper.Map<ProductDto>(productModel);
-                return CreatedAtRoute(nameof(GetProduct), new { id = productDto.Id }, productDto);
+                var resources = _mapper.Map<Product, ProductDto>(productModel);
+                //var productDto = _mapper.Map<ProductDto>(productModel);
+                return CreatedAtRoute(nameof(GetProduct), new { id = resources.Id }, resources);
 
             }
             catch
@@ -113,7 +114,7 @@ namespace InventoryAPI.Controllers
         {
             try
             {
-                var updateProduct = _mapper.Map<Product>(productDto);
+                var updateProduct = _mapper.Map<ProductDto, Product>(productDto);
 
                 if (updateProduct.Id == id)
                 {
@@ -137,9 +138,8 @@ namespace InventoryAPI.Controllers
             try
             {
                 var getProduct = await _productService.GetProduct(id);
-                // var product = _mapper.Map<Product>(getProduct);
 
-                if (getProduct.Id != null)
+                if (getProduct != null)
                 {
                     await _productService.DeleteProduct(getProduct);
                     return Ok($"Produto com id={id} deletado com sucesso!");
