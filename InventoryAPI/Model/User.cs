@@ -7,8 +7,11 @@ namespace InventoryAPI.Model
     {
         public int Id { get; set; }
         [Required]
+        [StringLength(150)]
+        public string FullName { get; set; }
+        [Required]
         [StringLength(100)]
-        public string Name { get; set; }
+        public string Login { get; set; }
         [Required]
         [Phone]
         [StringLength(11)]

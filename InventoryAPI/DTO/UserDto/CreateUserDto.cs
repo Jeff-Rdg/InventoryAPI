@@ -6,7 +6,9 @@ namespace InventoryAPI.DTO.UserDto
     {
         [Required]
         [MaxLength(100)]
-        public string Name { get; set; }
+        public string FullName { get; set; }
+        [Required]
+        public string Login { get; set; }
         [Required]
         public string Phone { get; set; }
         [Required]

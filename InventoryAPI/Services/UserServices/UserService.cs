@@ -34,7 +34,7 @@ namespace InventoryAPI.Services.UserServices
                 IEnumerable<User> users;
                 if (!string.IsNullOrWhiteSpace(name))
                 {
-                    users = await _context.Users.Where(u => u.Name.Contains(name)).ToListAsync();
+                    users = await _context.Users.Where(u => u.FullName.Contains(name)).ToListAsync();
 
                 }
                 else

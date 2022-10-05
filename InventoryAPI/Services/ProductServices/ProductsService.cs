@@ -18,7 +18,6 @@ namespace InventoryAPI.Services.ProductServices
         {
             try
             {
-                //corrigir referencia circular
                 return await _context.Products.Include(p => p.ProductType).ToListAsync();
             }
             catch
