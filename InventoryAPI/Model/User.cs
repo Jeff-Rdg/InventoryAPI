@@ -10,14 +10,10 @@ namespace InventoryAPI.Model
         [StringLength(150)]
         public string FullName { get; set; }
         [Required]
-        [StringLength(100)]
-        public string Login { get; set; }
-        [Required]
         [Phone]
         [StringLength(11)]
         public string Phone { get; set; }
         [Required]
-        [StringLength(100)]
         public string Email { get; set; }
         [Required]
         [StringLength(30)]

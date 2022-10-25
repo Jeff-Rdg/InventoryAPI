@@ -1,6 +1,7 @@
 ﻿using InventoryAPI.Context;
 using InventoryAPI.Services.ProductServices;
 using InventoryAPI.Services.ProductTypeService;
+using InventoryAPI.Services.StorageService;
 using InventoryAPI.Services.UserServices;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
@@ -21,6 +22,7 @@ builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer("Dat
 builder.Services.AddScoped<IProductService, ProductsService>();
 builder.Services.AddScoped<IProductTypeService, ProductTypesService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IStorageService, StorageService>();
 
 // Registro de automappper
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
@@ -33,6 +35,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors(options =>
+{
+    options.WithOrigins("http://localhost:3000");
+    options.AllowAnyMethod();
+    options.AllowAnyHeader();
+});
 
 app.UseHttpsRedirection();
 

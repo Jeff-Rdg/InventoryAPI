@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using InventoryAPI.DTO;
-using InventoryAPI.DTO.ProductTypeDto;
 using InventoryAPI.Model;
 using InventoryAPI.Services.ProductServices;
 using Microsoft.AspNetCore.Mvc;

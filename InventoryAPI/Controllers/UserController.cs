@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using InventoryAPI.DTO;
 using InventoryAPI.DTO.UserDto;
 using InventoryAPI.Model;
 using InventoryAPI.Services.UserServices;
@@ -48,7 +47,7 @@ namespace InventoryAPI.Controllers
             }
         }
         [HttpGet("userbyname")]
-        public async Task <ActionResult<IEnumerable<UserDto>>> GetUserByName([FromQuery] string name)
+        public async Task<ActionResult<IEnumerable<UserDto>>> GetUserByName([FromQuery] string name)
         {
             try
             {
@@ -97,11 +96,51 @@ namespace InventoryAPI.Controllers
 
             try
             {
-                var userModel = _mapper.Map<CreateUserDto, User>(createUserDto);
 
-                await _userService.CreateUser(userModel);
-                var resources = _mapper.Map<User, UserDto>(userModel);
-                return CreatedAtRoute(nameof(GetUser), new { id = resources.Id }, resources);
+                if (!ModelState.IsValid) return BadRequest(ModelState.Values.SelectMany(e => e.Errors));
+
+                var emailCheck = await _userService.GetUserByEmail(createUserDto.Email);
+
+                if (emailCheck != null)
+                {
+                    return BadRequest("Email ja cadastrado no sistema.");
+                }
+                else
+                {
+                    var userModel = _mapper.Map<CreateUserDto, User>(createUserDto);
+                    await _userService.CreateUser(userModel);
+                    var resources = _mapper.Map<User, UserDto>(userModel);
+                    return CreatedAtRoute(nameof(GetUser), new { id = resources.Id }, resources);
+
+                }
+
+
+
+            }
+            catch
+            {
+                return BadRequest("Invalido");
+            }
+        }
+        [HttpPost("login")]
+        public async Task<ActionResult> LoginUser(LoginUserDto loginUserDto)
+        {
+
+            try
+            {
+                //corrigir
+                if (!ModelState.IsValid) return BadRequest(ModelState.Values.SelectMany(e => e.Errors));
+
+                var users = await _userService.GetUsers();
+
+                foreach (var user in users)
+                {
+                    if(user.Email == loginUserDto.Email && user.Password == loginUserDto.Password)
+                    {
+                        return Ok("Login realizado com sucesso");
+                    }
+                }
+                return BadRequest("Dados informados incorretamente, tente novamente.");
 
             }
             catch

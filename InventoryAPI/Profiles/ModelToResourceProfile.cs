@@ -13,6 +13,7 @@ namespace InventoryAPI.Profiles
             CreateMap<ProductType, ProductTypeDto>();
             CreateMap<Product, ProductDto>();
             CreateMap<User, UserDto>();
+            CreateMap<User, LoginUserDto>();
         }
     }
 }

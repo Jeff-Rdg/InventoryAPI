@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using InventoryAPI.DTO.ProductTypeDto;
+using System.ComponentModel.DataAnnotations;
 
 namespace InventoryAPI.DTO
 {
@@ -10,7 +11,6 @@ namespace InventoryAPI.DTO
         [Required]
         public string Description { get; set; }
         [Required]
-        public int ProductTypeId { get; set; }
-        public DateTime CreatedDate { get; set; } = DateTime.Now;
+        public CreateProductTypeDto ProductType { get; set; }
     }
 }

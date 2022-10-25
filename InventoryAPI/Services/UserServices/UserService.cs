@@ -49,6 +49,29 @@ namespace InventoryAPI.Services.UserServices
             }
         }
 
+        public async Task<IEnumerable<User>> GetUserByEmail(string email)
+        {
+            try
+            {
+
+                IEnumerable<User> users;
+                if (!string.IsNullOrWhiteSpace(email))
+                {
+                    users = await _context.Users.Where(u => u.Email.Contains(email)).ToListAsync();
+
+                }
+                else
+                {
+                    users = await GetUsers();
+                }
+                return users;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
         public async Task<User> GetUser(int id)
         {
             try
