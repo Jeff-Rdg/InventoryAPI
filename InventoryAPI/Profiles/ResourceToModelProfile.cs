@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using InventoryAPI.DTO;
 using InventoryAPI.DTO.ProductTypeDto;
+using InventoryAPI.DTO.ProviderDto;
 using InventoryAPI.DTO.StorageDto;
 using InventoryAPI.DTO.UserDto;
 using InventoryAPI.Model;
@@ -21,6 +22,8 @@ namespace InventoryAPI.Profiles
             CreateMap<LoginUserDto, User>();
 
             CreateMap<CreateStorageDto, Storage>();
+
+            CreateMap<CreateProviderDto, Provider>();
         }
     }
 }

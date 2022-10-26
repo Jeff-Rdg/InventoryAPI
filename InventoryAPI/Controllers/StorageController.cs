@@ -81,7 +81,7 @@ namespace InventoryAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<CreateStorageDto>> CreateStorage(CreateStorageDto createStorageDto)
+        public async Task<ActionResult<Storage>> CreateStorage(CreateStorageDto createStorageDto)
         {
 
             try

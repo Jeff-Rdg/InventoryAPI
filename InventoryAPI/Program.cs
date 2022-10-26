@@ -1,6 +1,7 @@
 ﻿using InventoryAPI.Context;
 using InventoryAPI.Services.ProductServices;
 using InventoryAPI.Services.ProductTypeService;
+using InventoryAPI.Services.ProviderService;
 using InventoryAPI.Services.StorageService;
 using InventoryAPI.Services.UserServices;
 using Microsoft.EntityFrameworkCore;
@@ -23,6 +24,7 @@ builder.Services.AddScoped<IProductService, ProductsService>();
 builder.Services.AddScoped<IProductTypeService, ProductTypesService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IStorageService, StorageService>();
+builder.Services.AddScoped<IProviderService, ProviderService>();
 
 // Registro de automappper
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
