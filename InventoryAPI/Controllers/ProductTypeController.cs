@@ -26,7 +26,7 @@ namespace InventoryAPI.Controllers
             try
             {
                 var productTypes = await _productTypesService.GetProductTypes();
-                var resources = _mapper.Map<IEnumerable<ProductType>, IEnumerable<ProductTypeDto>> (productTypes);
+                var resources = _mapper.Map<IEnumerable<ProductType>, IEnumerable<ProductTypeDto>>(productTypes);
 
                 if (resources == null)
                 {
@@ -89,12 +89,27 @@ namespace InventoryAPI.Controllers
 
             try
             {
-
+                int count = 0;
                 var productType = _mapper.Map<CreateProductTypeDto, ProductType>(resource);
+                var searchProductType = await _productTypesService.GetProductTypeByName(productType.Name);
 
-                await _productTypesService.CreateProductType(productType);
+                foreach (var item in searchProductType)
+                {
+                    if(item.Name.ToLower() == productType.Name.ToLower())
+                    {
+                        count++;
+                    }
+                }
 
-                return CreatedAtRoute(nameof(GetProductType), new { id = productType.Id }, resource);
+                if(count == 0)
+                {
+                    await _productTypesService.CreateProductType(productType);
+
+                    return CreatedAtRoute(nameof(GetProductType), new { id = productType.Id }, resource);
+
+                }
+
+                return BadRequest("Categoria já registrada");
 
             }
             catch

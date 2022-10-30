@@ -13,6 +13,7 @@ namespace InventoryAPI.Profiles
         public ResourceToModelProfile()
         {
             CreateMap<CreateProductTypeDto, ProductType>();
+
             CreateMap<ProductTypeDto, ProductType>();
 
             CreateMap<ProductDto, Product>();

@@ -13,6 +13,7 @@ namespace InventoryAPI.Context
         public DbSet<User> Users { get; set; }
         public DbSet<Storage> Storages { get; set; }
         public DbSet<Provider> Providers { get; set; }
+        public DbSet<Inventory> Inventory { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
