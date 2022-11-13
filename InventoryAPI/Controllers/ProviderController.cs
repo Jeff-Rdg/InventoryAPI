@@ -3,6 +3,8 @@ using InventoryAPI.DTO;
 using InventoryAPI.DTO.ProviderDto;
 using InventoryAPI.Model;
 using InventoryAPI.Services.ProviderService;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,6 +12,7 @@ namespace InventoryAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class ProviderController : ControllerBase
     {
         private readonly IMapper _mapper;

@@ -2,6 +2,8 @@
 using InventoryAPI.DTO.ProductTypeDto;
 using InventoryAPI.Model;
 using InventoryAPI.Services.ProductTypeService;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,6 +11,7 @@ namespace InventoryAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class ProductTypeController : ControllerBase
     {
         private readonly IMapper _mapper;
@@ -26,7 +29,7 @@ namespace InventoryAPI.Controllers
             try
             {
                 var productTypes = await _productTypesService.GetProductTypes();
-                var resources = _mapper.Map<IEnumerable<ProductType>, IEnumerable<ProductTypeDto>>(productTypes);
+                var resources = _mapper.Map<IEnumerable<ProductType>, IEnumerable<ProductTypeDTO>>(productTypes);
 
                 if (resources == null)
                 {
@@ -48,7 +51,7 @@ namespace InventoryAPI.Controllers
             try
             {
                 var productTypes = await _productTypesService.GetProductTypeByName(name);
-                var resources = _mapper.Map<IEnumerable<ProductType>, IEnumerable<ProductTypeDto>>(productTypes);
+                var resources = _mapper.Map<IEnumerable<ProductType>, IEnumerable<ProductTypeDTO>>(productTypes);
 
                 if (resources.Count() == 0)
                 {
@@ -69,7 +72,7 @@ namespace InventoryAPI.Controllers
             try
             {
                 var productType = await _productTypesService.GetProductType(id);
-                var resource = _mapper.Map<ProductType, ProductTypeDto>(productType);
+                var resource = _mapper.Map<ProductType, ProductTypeDTO>(productType);
 
                 if (resource == null)
                 {
@@ -84,13 +87,13 @@ namespace InventoryAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateProductType(CreateProductTypeDto resource)
+        public async Task<IActionResult> CreateProductType(ProductTypeDTO resource)
         {
 
             try
             {
                 int count = 0;
-                var productType = _mapper.Map<CreateProductTypeDto, ProductType>(resource);
+                var productType = _mapper.Map<ProductTypeDTO, ProductType>(resource);
                 var searchProductType = await _productTypesService.GetProductTypeByName(productType.Name);
 
                 foreach (var item in searchProductType)
@@ -119,11 +122,11 @@ namespace InventoryAPI.Controllers
         }
 
         [HttpPut("{id:int}")]
-        public async Task<ActionResult> UpdateProductType(int id, [FromBody] ProductTypeDto resource)
+        public async Task<ActionResult> UpdateProductType(int id, [FromBody] ProductTypeDTO resource)
         {
             try
             {
-                var productType = _mapper.Map<ProductTypeDto, ProductType>(resource);
+                var productType = _mapper.Map<ProductTypeDTO, ProductType>(resource);
 
                 if (productType.Id == id)
                 {

@@ -3,12 +3,12 @@ using InventoryAPI.DTO;
 using InventoryAPI.Model;
 using InventoryAPI.Services.ProductServices;
 using Microsoft.AspNetCore.Mvc;
-using System.Resources;
 
 namespace InventoryAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    //[Authorize(AuthenticationSchemes =JwtBearerDefaults.AuthenticationScheme)]
     public class ProductController : ControllerBase
     {
         private readonly IMapper _mapper;
@@ -99,7 +99,7 @@ namespace InventoryAPI.Controllers
 
                 var resources = _mapper.Map<Product, ProductDto>(productModel);
                 //var productDto = _mapper.Map<ProductDto>(productModel);
-                return CreatedAtRoute(nameof(GetProduct), new { id = resources.Id }, resources);
+                return CreatedAtRoute(nameof(GetProduct), new { id = resources.Id }, productModel);
 
             }
             catch
@@ -109,11 +109,11 @@ namespace InventoryAPI.Controllers
         }
 
         [HttpPut("{id:int}")]
-        public async Task <ActionResult> UpdateProduct(int id, [FromBody] ProductDto productDto)
+        public async Task <ActionResult> UpdateProduct(int id, [FromBody] UpdateProductDto productDto)
         {
             try
             {
-                var updateProduct = _mapper.Map<ProductDto, Product>(productDto);
+                var updateProduct = _mapper.Map<UpdateProductDto, Product>(productDto);
 
                 if (updateProduct.Id == id)
                 {

@@ -1,22 +1,24 @@
 ﻿using InventoryAPI.Model;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection.Metadata;
 
 namespace InventoryAPI.Context
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : IdentityDbContext<IdentityUser>
     {
-        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options){}
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductType> ProductTypes { get; set; }
-        public DbSet<User> Users { get; set; }
         public DbSet<Storage> Storages { get; set; }
         public DbSet<Provider> Providers { get; set; }
         public DbSet<Inventory> Inventory { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<ProductType>().HasKey(p => p.Id);
             modelBuilder.Entity<ProductType>().Property(p => p.Id).IsRequired().ValueGeneratedOnAdd();
@@ -30,7 +32,7 @@ namespace InventoryAPI.Context
             modelBuilder.Entity<Product>().Property(b => b.CreatedDate).HasDefaultValueSql("getdate()");
 
 
-    }
+        }
 
 
     }

@@ -2,12 +2,15 @@
 using InventoryAPI.DTO.StorageDto;
 using InventoryAPI.Model;
 using InventoryAPI.Services.StorageService;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InventoryAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class StorageController : ControllerBase
     {
         private readonly IMapper _mapper;
