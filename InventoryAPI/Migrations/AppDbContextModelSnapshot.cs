@@ -62,7 +62,7 @@ namespace InventoryAPI.Migrations
 
                     b.HasIndex("StorageId");
 
-                    b.ToTable("Inventory");
+                    b.ToTable("Inventory", (string)null);
                 });
 
             modelBuilder.Entity("InventoryAPI.Model.Product", b =>
@@ -95,7 +95,7 @@ namespace InventoryAPI.Migrations
 
                     b.HasIndex("ProductTypeId");
 
-                    b.ToTable("Products");
+                    b.ToTable("Products", (string)null);
                 });
 
             modelBuilder.Entity("InventoryAPI.Model.ProductType", b =>
@@ -113,7 +113,7 @@ namespace InventoryAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ProductTypes");
+                    b.ToTable("ProductTypes", (string)null);
                 });
 
             modelBuilder.Entity("InventoryAPI.Model.Provider", b =>
@@ -151,7 +151,7 @@ namespace InventoryAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Providers");
+                    b.ToTable("Providers", (string)null);
                 });
 
             modelBuilder.Entity("InventoryAPI.Model.Storage", b =>
@@ -168,7 +168,7 @@ namespace InventoryAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Storages");
+                    b.ToTable("Storages", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

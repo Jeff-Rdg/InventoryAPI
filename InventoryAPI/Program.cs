@@ -1,5 +1,6 @@
 ﻿using InventoryAPI.Context;
 using InventoryAPI.Services.AuthenticateService;
+using InventoryAPI.Services.InventoryService;
 using InventoryAPI.Services.ProductServices;
 using InventoryAPI.Services.ProductTypeService;
 using InventoryAPI.Services.ProviderService;
@@ -63,6 +64,7 @@ builder.Services.AddScoped<IProductTypeService, ProductTypesService>();
 builder.Services.AddScoped<IStorageService, StorageService>();
 builder.Services.AddScoped<IProviderService, ProviderService>();
 builder.Services.AddScoped<IAuthenticate, AuthenticateService>();
+builder.Services.AddScoped<IInventoryService, InventoryService>();
 
 // autenticação Jwt
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
