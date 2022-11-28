@@ -13,10 +13,11 @@ namespace InventoryAPI.Services.InventoryService
             _context = context;
         }
         public async Task<IEnumerable<Inventory>> GetInventories()
+
         {
             try
             {
-                return await _context.Inventory.ToListAsync();
+                return await _context.Inventory.Include(p => p.Product).Include(q => q.Provider).Include(r => r.Storage).ToListAsync();
             }
             catch
             {
@@ -27,7 +28,7 @@ namespace InventoryAPI.Services.InventoryService
         {
             try
             {
-                var inventory = await _context.Inventory.FindAsync(id);
+                var inventory = await _context.Inventory.Include(p => p.Product).Include(q => q.Provider).Include(r => r.Storage).FirstOrDefaultAsync(i => i.Id == id);
                 return inventory;
             }
             catch
@@ -44,7 +45,7 @@ namespace InventoryAPI.Services.InventoryService
                 IEnumerable<Inventory> inventories;
                 if (!string.IsNullOrWhiteSpace(name))
                 {
-                    inventories = await _context.Inventory.Where(n => n.Product.Name.Contains(name)).ToListAsync();
+                    inventories = await _context.Inventory.Where(n => n.Product.Name.Contains(name)).Include(p => p.Product).Include(q => q.Provider).Include(r => r.Storage).ToListAsync();
 
                 }
                 else

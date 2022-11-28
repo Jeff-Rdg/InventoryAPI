@@ -1,13 +1,12 @@
-﻿namespace InventoryAPI.Model
+﻿using InventoryAPI.Model;
+
+namespace InventoryAPI.DTO.InventoryDto
 {
-    public class Inventory
+    public class InventoryDto
     {
         public int Id { get; set; }
-        public int ProductId { get; set; }
         public virtual Product Product { get; set; }
-        public int StorageId { get; set; }
         public virtual Storage Storage { get; set; }
-        public int ProviderId { get; set; }
         public virtual Provider Provider { get; set; }
         public int Quantity { get; set; }
         public bool isDownloaded { get; set; }

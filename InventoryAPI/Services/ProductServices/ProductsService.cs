@@ -50,7 +50,7 @@ namespace InventoryAPI.Services.ProductServices
         {
             try
             {
-                var product = await _context.Products.FindAsync(id);
+                var product = await _context.Products.Include(p => p.ProductType).FirstOrDefaultAsync(i => i.Id == id);
                 return product;
             }
             catch
