@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using InventoryAPI.ViewModels;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace InventoryAPI.Services.AuthenticateService
 {
@@ -15,7 +17,9 @@ namespace InventoryAPI.Services.AuthenticateService
 
         public async Task<bool> Authenticate(string email, string password)
         {
-            var result = await _signInManager.PasswordSignInAsync(email, password, false, lockoutOnFailure: false);
+            var user = await _userManager.FindByEmailAsync(email);
+
+            var result = await _signInManager.PasswordSignInAsync(user.UserName, password, false, lockoutOnFailure: false);
 
             return result.Succeeded;
         }
@@ -25,11 +29,11 @@ namespace InventoryAPI.Services.AuthenticateService
             await _signInManager.SignOutAsync();
         }
 
-        public  async Task<bool> RegisterUser(string email, string password)
+        public async Task<bool> RegisterUser(string userName, string email, string password)
         {
             var appUser = new IdentityUser
             {
-                UserName = email,
+                UserName = userName,
                 Email = email,
             };
 
@@ -40,5 +44,11 @@ namespace InventoryAPI.Services.AuthenticateService
             }
             return result.Succeeded;
         }
+        public async Task<IEnumerable<IdentityUser>> GetUsers()
+        {
+            var users = await _userManager.Users.ToListAsync();
+            return users;
+        }
+
     }
 }

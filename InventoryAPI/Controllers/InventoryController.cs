@@ -8,16 +8,17 @@ using Microsoft.EntityFrameworkCore;
 using InventoryAPI.Context;
 using InventoryAPI.Model;
 using AutoMapper;
-using InventoryAPI.Services.ProductServices;
 using InventoryAPI.Services.InventoryService;
 using InventoryAPI.DTO.InventoryDto;
 using InventoryAPI.DTO;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 
 namespace InventoryAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize(AuthenticationSchemes =JwtBearerDefaults.AuthenticationScheme)]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class InventoryController : ControllerBase
     {
         private readonly IMapper _mapper;
@@ -103,12 +104,16 @@ namespace InventoryAPI.Controllers
 
         // PUT: api/Inventory/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateInventory(int id, InventoryDto inventoryDto)
+        [HttpPut("{id:int}")]
+        public async Task<ActionResult> UpdateInventory(int id, [FromBody] UpdateInventoryDto inventoryDto)
         {
             try
             {
-                var inventory = _mapper.Map<InventoryDto, Inventory>(inventoryDto);
+                var inventory = _mapper.Map<UpdateInventoryDto, Inventory>(inventoryDto);
+                if (inventory.Quantity < 0)
+                {
+                    return BadRequest("Dados inconsistentes");
+                }
 
                 if (inventory.Id == id)
                 {
@@ -136,6 +141,10 @@ namespace InventoryAPI.Controllers
             try
             {
                 var inventory = _mapper.Map<CreateInventoryDto, Inventory>(createInventoryDto);
+                if (inventory.Quantity < 0)
+                {
+                    return BadRequest("Dados inconsistentes");
+                }
 
                 await _inventoryService.CreateInventory(inventory);
 
@@ -149,7 +158,7 @@ namespace InventoryAPI.Controllers
         }
 
         // DELETE: api/Inventory/5
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:int}")]
         public async Task<IActionResult> DeleteInventory(int id)
         {
             try

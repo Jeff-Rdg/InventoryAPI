@@ -5,6 +5,8 @@ using InventoryAPI.DTO.ProductTypeDto;
 using InventoryAPI.DTO.ProviderDto;
 using InventoryAPI.DTO.StorageDto;
 using InventoryAPI.Model;
+using InventoryAPI.ViewModels;
+using Microsoft.AspNetCore.Identity;
 
 namespace InventoryAPI.Profiles
 {
@@ -24,6 +26,9 @@ namespace InventoryAPI.Profiles
 
             CreateMap<InventoryDto, Inventory>();
             CreateMap<CreateInventoryDto, Inventory>();
+            CreateMap<UpdateInventoryDto, Inventory>();
+
+            CreateMap<UserModel,IdentityUser>();
         }
     }
 }

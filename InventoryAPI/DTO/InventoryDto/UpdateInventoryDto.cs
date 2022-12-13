@@ -1,9 +1,8 @@
-﻿using InventoryAPI.Model;
-
-namespace InventoryAPI.DTO.InventoryDto
+﻿namespace InventoryAPI.DTO.InventoryDto
 {
-    public class CreateInventoryDto
+    public class UpdateInventoryDto
     {
+        public int Id { get; set; }
         public int ProductId { get; set; }
         public int StorageId { get; set; }
         public int ProviderId { get; set; }

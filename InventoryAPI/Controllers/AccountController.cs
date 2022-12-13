@@ -1,6 +1,12 @@
-﻿using InventoryAPI.Services.AuthenticateService;
+﻿using AutoMapper;
+using InventoryAPI.DTO.InventoryDto;
+using InventoryAPI.Model;
+using InventoryAPI.Services.AuthenticateService;
 using InventoryAPI.ViewModels;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -15,27 +21,31 @@ namespace InventoryAPI.Controllers
     {
         private readonly IConfiguration _configuration;
         private readonly IAuthenticate _authenticate;
+        private readonly IMapper _mapper;
 
-        public AccountController(IConfiguration configuration, IAuthenticate authenticate)
+        public AccountController(IConfiguration configuration, IAuthenticate authenticate, UserManager<IdentityUser> userManager, IMapper mapper)
         {
             _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
             _authenticate = authenticate ?? throw new ArgumentNullException(nameof(authenticate));
+            _mapper = mapper;
+
         }
 
         [HttpPost("createuser")]
         public async Task<ActionResult<UserToken>> CreateUser([FromBody] RegisterModel model)
         {
-            if(model.Password != model.ConfirmPassword)
+            if (model.Password != model.ConfirmPassword)
             {
                 ModelState.AddModelError("ConfirmPassword", "As senhas não conferem.");
                 return BadRequest(ModelState);
             }
-            var result = await _authenticate.RegisterUser(model.Email, model.Password);
+            var result = await _authenticate.RegisterUser(model.UserName, model.Email, model.Password);
 
             if (result)
             {
-                return Ok($"Usuário {model.Email} criado com sucesso");
-            }else
+                return Ok($"Usuário {model.UserName} criado com sucesso");
+            }
+            else
             {
                 ModelState.AddModelError("CreateUser", "Registro inválido.");
                 return BadRequest(ModelState);
@@ -68,7 +78,7 @@ namespace InventoryAPI.Controllers
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:key"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-            var expiration = DateTime.UtcNow.AddMinutes(50);
+            var expiration = DateTime.UtcNow.AddDays(1);
             JwtSecurityToken token = new JwtSecurityToken(
                 issuer: _configuration["Jwt:Issuer"],
                 audience: _configuration["Jwt:Audience"],
@@ -83,5 +93,20 @@ namespace InventoryAPI.Controllers
                 Expiration = expiration,
             };
         }
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<UserModel>>> GetUsers()
+        {
+            var users = await _authenticate.GetUsers();
+
+            var resources = _mapper.Map<IEnumerable<IdentityUser>, IEnumerable<UserModel>>(users);
+
+            if (resources == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(resources);
+        }
+
     }
 }

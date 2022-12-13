@@ -17,7 +17,7 @@ namespace InventoryAPI.Services.InventoryService
         {
             try
             {
-                return await _context.Inventory.Include(p => p.Product).Include(q => q.Provider).Include(r => r.Storage).ToListAsync();
+                return await _context.Inventory.Include(p => p.Product).Include(q => q.Provider).Include(r => r.Storage).Where(x => x.Quantity > 0).ToListAsync();
             }
             catch
             {
